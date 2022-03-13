@@ -54,7 +54,7 @@ func Test_parseQuordle(t *testing.T) {
 		Misplaced int
 	}{
 		{
-			Known:     4,
+			Known:     5,
 			Misplaced: 5,
 		},
 		{

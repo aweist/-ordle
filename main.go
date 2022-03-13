@@ -12,10 +12,6 @@ const (
 	DictionaryDir = "english3.txt"
 )
 
-// func SolutionFromFile(filename string) (result []string, err error) {
-// 	return Solution(parseInput(filename))
-// }
-
 func QuordleSolutions(states []State) (results [][]string) {
 	for _, s := range states {
 		results = append(results, Solution(s))
