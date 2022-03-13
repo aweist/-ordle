@@ -33,13 +33,6 @@ func TestSolution(t *testing.T) {
 	}
 }
 
-func TestBuildDict(t *testing.T) {
-	dict, err := buildDict("dictionary.csv")
-	assert.NoError(t, err)
-	assert.True(t, len(dict) > 0)
-	log.Println("Words:", len(dict))
-}
-
 func TestQuordle(t *testing.T) {
 	filename := "parse/test_quordle.html"
 	f, err := os.Open(filename)
