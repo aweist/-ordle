@@ -1,4 +1,4 @@
-package main
+package parse
 
 import (
 	"io"
@@ -17,7 +17,7 @@ const (
 	Empty     CellResult = ""
 )
 
-func parseQuordle(r io.Reader) []State {
+func ParseQuordle(r io.Reader) []State {
 	states := []State{}
 
 	root, err := html.Parse(r)

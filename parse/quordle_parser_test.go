@@ -1,4 +1,4 @@
-package main
+package parse
 
 import (
 	"fmt"
@@ -42,12 +42,12 @@ func TestGetGameBoards(t *testing.T) {
 	}
 }
 
-func Test_parseQuordle(t *testing.T) {
+func Test_ParseQuordle(t *testing.T) {
 
 	f, err := os.Open("test_quordle.html")
 	assert.NoError(t, err)
 
-	states := parseQuordle(f)
+	states := ParseQuordle(f)
 
 	expectations := []struct {
 		Known     int

@@ -46,7 +46,7 @@ func TestQuordle(t *testing.T) {
 	filename := "test_quordle.html"
 	f, err := os.Open(filename)
 	assert.NoError(t, err)
-	states := parseQuordle(f)
+	states := parse.ParseQuordle(f)
 	results := QuordleSolutions(states)
 	for i, result := range results {
 		fmt.Println("Results for", i)

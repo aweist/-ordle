@@ -8,6 +8,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/aweist/ordle/parse"
 )
 
 const (
@@ -45,7 +47,7 @@ func SolveQuordle(filename string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	states := parseQuordle(f)
+	states := parse.ParseQuordle(f)
 	results := QuordleSolutions(states)
 	for i, result := range results {
 		log.Println("Results for", i)
