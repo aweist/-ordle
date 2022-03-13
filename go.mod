@@ -1,4 +1,4 @@
-module quordle
+module github.com/aweist/quordle
 
 go 1.17
 
