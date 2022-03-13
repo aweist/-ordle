@@ -111,7 +111,7 @@ func Test_cellValue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := nodeValue(tt.args.cell); got != tt.want {
+			if got := NodeValue(tt.args.cell); got != tt.want {
 				t.Errorf("cellValue() = %v, want %v", got, tt.want)
 			}
 		})

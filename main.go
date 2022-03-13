@@ -57,14 +57,14 @@ func SolveQuordle(filename string) {
 	}
 }
 
-func QuordleSolutions(states []State) (results [][]string) {
+func QuordleSolutions(states []parse.State) (results [][]string) {
 	for _, s := range states {
 		results = append(results, Solution(s))
 	}
 	return
 }
 
-func Solution(state State) (result []string) {
+func Solution(state parse.State) (result []string) {
 	d, err := buildDict(DictionaryDir)
 	if err != nil {
 		log.Fatal(err)

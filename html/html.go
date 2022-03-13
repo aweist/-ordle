@@ -31,7 +31,7 @@ func GetAttr(node *html.Node, key string) string {
 	return ""
 }
 
-func nodeValue(cell *html.Node) byte {
+func NodeValue(cell *html.Node) byte {
 	if cell.FirstChild == nil {
 		return ' '
 	}

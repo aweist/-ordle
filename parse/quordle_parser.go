@@ -5,7 +5,8 @@ import (
 	"log"
 	"strings"
 
-	"golang.org/x/net/html"
+	"github.com/aweist/ordle/html"
+	net_html "golang.org/x/net/html"
 )
 
 type CellResult string
@@ -20,7 +21,7 @@ const (
 func ParseQuordle(r io.Reader) []State {
 	states := []State{}
 
-	root, err := html.Parse(r)
+	root, err := net_html.Parse(r)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,14 +31,14 @@ func ParseQuordle(r io.Reader) []State {
 	for i := range boards {
 		board := boards[i]
 		state := NewState()
-		rows := FindNodeByAttr(board, "role", "row")
+		rows := html.FindNodeByAttr(board, "role", "row")
 		for j := range rows {
 			row := rows[j]
-			cells := FindNodeByAttr(row, "role", "cell")
+			cells := html.FindNodeByAttr(row, "role", "cell")
 			for k := range cells {
 				cell := cells[k]
-				content := FindNodeByAttr(cell, "class", "quordle-box-content")
-				char := nodeValue(content[0])
+				content := html.FindNodeByAttr(cell, "class", "quordle-box-content")
+				char := html.NodeValue(content[0])
 				cellResult := readCell(cell)
 				if char != ' ' {
 					switch cellResult {
@@ -58,13 +59,13 @@ func ParseQuordle(r io.Reader) []State {
 	return states
 }
 
-func GetGameBoards(root *html.Node) []*html.Node {
-	boards := FindNodeByAttr(root, "aria-label", "Game Boards")
-	return FindNodeByAttr(boards[0], "role", "table")
+func GetGameBoards(root *net_html.Node) []*net_html.Node {
+	boards := html.FindNodeByAttr(root, "aria-label", "Game Boards")
+	return html.FindNodeByAttr(boards[0], "role", "table")
 }
 
-func readCell(cell *html.Node) CellResult {
-	class := GetAttr(cell, "class")
+func readCell(cell *net_html.Node) CellResult {
+	class := html.GetAttr(cell, "class")
 	if strings.Contains(class, "bg-box-correct") {
 		return Correct
 	}

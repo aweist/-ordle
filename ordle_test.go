@@ -6,27 +6,25 @@ import (
 	"os"
 	"testing"
 
+	"github.com/aweist/ordle/parse"
 	"github.com/stretchr/testify/assert"
 )
 
-var scenarios = map[int]State{
-	0: {
-		known: map[int]byte{
-			1: 'o',
-			3: 'e',
-		},
-		misplaced: map[intChar]bool{
-			{1, 'e'}: true,
-			{2, 'o'}: true,
-			{2, 'w'}: true,
-			{3, 'n'}: true,
-		},
-		wrong: map[byte]bool{},
-	},
+func generateTestState() parse.State {
+	state := parse.NewState()
+	state.Known(1, 'o')
+	state.Known(3, 'e')
+
+	state.Misplaced(1, 'e')
+	state.Misplaced(2, 'o')
+	state.Misplaced(2, 'w')
+	state.Misplaced(3, 'n')
+	return state
 }
 
 func TestSolution(t *testing.T) {
-	s := scenarios[0]
+
+	s := generateTestState()
 	r := Solution(s)
 	assert.Greater(t, len(r), 0)
 	log.Println("Matches:", len(r))
@@ -43,7 +41,7 @@ func TestBuildDict(t *testing.T) {
 }
 
 func TestQuordle(t *testing.T) {
-	filename := "test_quordle.html"
+	filename := "parse/test_quordle.html"
 	f, err := os.Open(filename)
 	assert.NoError(t, err)
 	states := parse.ParseQuordle(f)
