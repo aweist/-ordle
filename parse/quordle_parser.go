@@ -9,15 +9,6 @@ import (
 	net_html "golang.org/x/net/html"
 )
 
-type CellResult string
-
-const (
-	Correct   CellResult = "correct"
-	Misplaced CellResult = "Misplaced"
-	Wrong     CellResult = "wrong"
-	Empty     CellResult = ""
-)
-
 func ParseQuordle(r io.Reader) []State {
 	states := []State{}
 
@@ -26,7 +17,7 @@ func ParseQuordle(r io.Reader) []State {
 		log.Fatal(err)
 	}
 
-	boards := GetGameBoards(root)
+	boards := GetQuordleGameBoards(root)
 
 	for i := range boards {
 		board := boards[i]
@@ -59,7 +50,7 @@ func ParseQuordle(r io.Reader) []State {
 	return states
 }
 
-func GetGameBoards(root *net_html.Node) []*net_html.Node {
+func GetQuordleGameBoards(root *net_html.Node) []*net_html.Node {
 	boards := html.FindNodeByAttr(root, "aria-label", "Game Boards")
 	return html.FindNodeByAttr(boards[0], "role", "table")
 }

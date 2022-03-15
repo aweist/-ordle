@@ -88,10 +88,6 @@ func TestGetAttr(t *testing.T) {
 }
 
 func Test_cellValue(t *testing.T) {
-	s := `<p foo="bar">TOO</p>`
-	root, err := html.Parse(strings.NewReader(s))
-	assert.NoError(t, err)
-	node := FindNodeByAttr(root, "foo", "bar")
 
 	type args struct {
 		cell *html.Node
@@ -102,9 +98,26 @@ func Test_cellValue(t *testing.T) {
 		want byte
 	}{
 		{
-			name: "base",
+			name: "quordle",
 			args: args{
-				cell: node[0],
+				cell: func() *html.Node {
+					s := `<p foo="bar">TOO</p>`
+					root, err := html.Parse(strings.NewReader(s))
+					assert.NoError(t, err)
+					return FindNodeByAttr(root, "foo", "bar")[0]
+				}(),
+			},
+			want: 't',
+		},
+		{
+			name: "octordle",
+			args: args{
+				cell: func() *html.Node {
+					s := `<p class="box button" width="20%" id="box1,1,1,"style="color: black; background-color: rgb(255, 204, 0);">T</p>`
+					root, err := html.Parse(strings.NewReader(s))
+					assert.NoError(t, err)
+					return FindNodeByAttr(root, "class", "box button")[0]
+				}(),
 			},
 			want: 't',
 		},

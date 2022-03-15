@@ -35,7 +35,7 @@ func TestGetGameBoards(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := GetGameBoards(tt.args.root); !reflect.DeepEqual(len(got), tt.want) {
+			if got := GetQuordleGameBoards(tt.args.root); !reflect.DeepEqual(len(got), tt.want) {
 				t.Errorf("GetGameBoards() = %v, want %v", len(got), tt.want)
 			}
 		})

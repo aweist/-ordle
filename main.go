@@ -28,6 +28,8 @@ func main() {
 	switch *fileType {
 	case "quordle":
 		SolveQuordle(*filename)
+	case "octordle":
+		SolveOctordle(*filename)
 	default:
 		flag.PrintDefaults()
 	}
@@ -38,8 +40,30 @@ func validFileTypes() []string {
 	return []string{
 		// "wordle",
 		"quordle",
-		// "octordle",
+		"octordle",
 	}
+}
+
+func SolveOctordle(filename string) {
+	f, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	states := parse.ParseOctordle(f)
+	results := OctordleSolutions(states)
+	for i, result := range results {
+		log.Println("Results for", i)
+		for _, r := range result {
+			log.Println("  ", r)
+		}
+	}
+}
+
+func OctordleSolutions(states []parse.State) (results [][]string) {
+	for _, s := range states {
+		results = append(results, Solution(s))
+	}
+	return
 }
 
 func SolveQuordle(filename string) {
