@@ -3,12 +3,11 @@ package parse
 import (
 	"io"
 	"log"
-	"strings"
 
 	"github.com/aweist/ordle/html"
 )
 
-func ParseQuordle(r io.Reader) []State {
+func ParseWordle(r io.Reader) []State {
 	states := []State{}
 
 	root, err := html.Parse(r)
@@ -47,20 +46,4 @@ func ParseQuordle(r io.Reader) []State {
 	}
 
 	return states
-}
-
-func GetQuordleGameBoards(root *html.Node) []*html.Node {
-	boards := html.FindNodeByAttr(root, "aria-label", "Game Boards")
-	return html.FindNodeByAttr(boards[0], "role", "table")
-}
-
-func readCell(cell *html.Node) CellResult {
-	class := html.GetAttr(cell, "class")
-	if strings.Contains(class, "bg-box-correct") {
-		return Correct
-	}
-	if strings.Contains(class, "bg-box-diff") {
-		return Misplaced
-	}
-	return Wrong
 }

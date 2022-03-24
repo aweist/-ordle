@@ -6,9 +6,13 @@ import (
 	"golang.org/x/net/html"
 )
 
-func FindNodeByAttr(root *html.Node, key, value string) (results []*html.Node) {
-	var f func(*html.Node)
-	f = func(node *html.Node) {
+type Node = html.Node
+
+var Parse = html.Parse
+
+func FindNodeByAttr(root *Node, key, value string) (results []*Node) {
+	var f func(*Node)
+	f = func(node *Node) {
 		for _, a := range node.Attr {
 			if a.Key == key && a.Val == value {
 				results = append(results, node)
@@ -22,7 +26,7 @@ func FindNodeByAttr(root *html.Node, key, value string) (results []*html.Node) {
 	return
 }
 
-func GetAttr(node *html.Node, key string) string {
+func GetAttr(node *Node, key string) string {
 	for _, attr := range node.Attr {
 		if attr.Key == key {
 			return attr.Val
@@ -31,10 +35,13 @@ func GetAttr(node *html.Node, key string) string {
 	return ""
 }
 
-func NodeValue(cell *html.Node) byte {
+func NodeValue(cell *Node) byte {
 	if cell.FirstChild == nil {
 		return ' '
 	}
-	b := strings.ToLower(cell.FirstChild.Data)[0]
+	data := cell.FirstChild.Data
+	data = strings.ToLower(data)
+	data = strings.TrimSpace(data)
+	b := data[0]
 	return b
 }

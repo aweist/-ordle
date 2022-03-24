@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/aweist/ordle/html"
-	net_html "golang.org/x/net/html"
 )
 
 const (
@@ -18,7 +17,7 @@ const (
 func ParseOctordle(r io.Reader) []State {
 	states := []State{}
 
-	root, err := net_html.Parse(r)
+	root, err := html.Parse(r)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,7 +28,7 @@ func ParseOctordle(r io.Reader) []State {
 		state := NewState()
 		cells := html.FindNodeByAttr(board, "class", "box button")
 		for i, c := range cells {
-			index := i % 8
+			index := i % 5
 			char := html.NodeValue(c)
 			if char != ' ' {
 				cellResult := readOctordleCell(c)
@@ -50,13 +49,13 @@ func ParseOctordle(r io.Reader) []State {
 	return states
 }
 
-func GetOctordleGameBoards(root *net_html.Node) []*net_html.Node {
+func GetOctordleGameBoards(root *html.Node) []*html.Node {
 	game := html.FindNodeByAttr(root, "id", "game")
 	div := html.FindNodeByAttr(game[0], "id", "normal-container")
 	return html.FindNodeByAttr(div[0], "class", "table_guesses")
 }
 
-func readOctordleCell(node *net_html.Node) CellResult {
+func readOctordleCell(node *html.Node) CellResult {
 	style := html.GetAttr(node, "style")
 	styleMap := styleMap(style)
 	bg := styleMap["background-color"]
@@ -79,7 +78,9 @@ func styleMap(style string) map[string]string {
 	for _, p := range pairs {
 		if len(p) > 0 {
 			kv := strings.Split(p, ":")
-			m[kv[0]] = kv[1]
+			if len(kv) == 2 {
+				m[kv[0]] = kv[1]
+			}
 		}
 	}
 	return m

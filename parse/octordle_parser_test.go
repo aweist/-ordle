@@ -6,13 +6,13 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	net_html "golang.org/x/net/html"
+	html "golang.org/x/net/html"
 )
 
 func TestGetOctordleGameBoards(t *testing.T) {
 	f, err := os.Open("test_octordle.html")
 	assert.NoError(t, err)
-	root, err := net_html.Parse(f)
+	root, err := html.Parse(f)
 	assert.NoError(t, err)
 
 	boards := GetOctordleGameBoards(root)

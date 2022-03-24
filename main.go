@@ -16,6 +16,8 @@ const (
 	DictionaryDir = "english3.txt"
 )
 
+type parser func(io.Reader) []parse.State
+
 func main() {
 	filteTypeUsage := fmt.Sprintf("Filetype must be one of [%s]", strings.Join(validFileTypes(), ","))
 	fileType := flag.String("t", "", filteTypeUsage)
@@ -26,6 +28,8 @@ func main() {
 	flag.Parse()
 
 	switch *fileType {
+	case "dordle":
+		SolveDordle(*filename)
 	case "quordle":
 		SolveQuordle(*filename)
 	case "octordle":
@@ -39,8 +43,27 @@ func main() {
 func validFileTypes() []string {
 	return []string{
 		// "wordle",
+		"dordle",
 		"quordle",
 		"octordle",
+	}
+}
+
+func SolveDordle(filename string) {
+	f, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	states := parse.ParseDordle(f)
+	printResults(Solutions(states))
+}
+
+func printResults(results [][]string) {
+	for i, result := range results {
+		log.Println("Results for", i)
+		for _, r := range result {
+			log.Println("  ", r)
+		}
 	}
 }
 
@@ -50,20 +73,7 @@ func SolveOctordle(filename string) {
 		log.Fatal(err)
 	}
 	states := parse.ParseOctordle(f)
-	results := OctordleSolutions(states)
-	for i, result := range results {
-		log.Println("Results for", i)
-		for _, r := range result {
-			log.Println("  ", r)
-		}
-	}
-}
-
-func OctordleSolutions(states []parse.State) (results [][]string) {
-	for _, s := range states {
-		results = append(results, Solution(s))
-	}
-	return
+	printResults(Solutions(states))
 }
 
 func SolveQuordle(filename string) {
@@ -72,16 +82,10 @@ func SolveQuordle(filename string) {
 		log.Fatal(err)
 	}
 	states := parse.ParseQuordle(f)
-	results := QuordleSolutions(states)
-	for i, result := range results {
-		log.Println("Results for", i)
-		for _, r := range result {
-			log.Println("  ", r)
-		}
-	}
+	printResults(Solutions(states))
 }
 
-func QuordleSolutions(states []parse.State) (results [][]string) {
+func Solutions(states []parse.State) (results [][]string) {
 	for _, s := range states {
 		results = append(results, Solution(s))
 	}
